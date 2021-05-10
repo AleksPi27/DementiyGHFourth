@@ -89,17 +89,30 @@ def read_tree(data: bytes) -> tp.List[tp.Tuple[int, str, str]]:
 
 def cat_file(obj_name: str, pretty: bool = True) -> None:
     # PUT YOUR CODE HERE
-    path = pathlib.Path(pathlib.Path(".git/objects/" + obj_name[:2] + "/" + obj_name[2:]))
-    f = open(path, mode="rb")
-    content = zlib.decompress(f.read())
-    header = str(content[:4])
-    header = header[2:6]
-    content = content[8:]
-    content = str(content)
-    content = content.replace("\'", "'")
-    content = content[2:-1]
-    if pretty:
-        content.join("\n").join("")
+    if "GIT_DIR" not in os.environ:
+        gitname = pathlib.Path(".git")
+    else:
+        gitname = pathlib.Path(os.environ["GIT_DIR"])
+    fmt, data = read_object(obj_name, gitname)
+    if fmt == "blob":
+        if pretty:
+            print(data.decode())
+        else:
+            print(data)
+        return
+    elif fmt == "tree":
+        content = read_tree(data)
+        if pretty:
+            for entry in content:
+                if entry[0] == 40000:
+                    print("040000", "tree", entry[2] + "\t" + entry[1])
+                else:
+                    print("100644", "blob", entry[2] + "\t" + entry[1])
+        else:
+            for entry in content:
+                print(entry[2])
+    else:
+        print(data.decode())
 
 
 def find_tree_files(tree_sha: str, gitdir: pathlib.Path) -> tp.List[tp.Tuple[str, str]]:
