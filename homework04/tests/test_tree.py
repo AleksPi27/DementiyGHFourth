@@ -2,12 +2,14 @@ import pathlib
 import stat
 import time
 import unittest
+import zlib
 from unittest.mock import patch
 
 from pyfakefs.fake_filesystem_unittest import TestCase
 
 import pyvcs
 from pyvcs.index import read_index, update_index
+from pyvcs.objects import hash_object
 from pyvcs.repo import repo_create
 from pyvcs.tree import commit_tree, write_tree
 
@@ -28,6 +30,7 @@ class WriteTreeTestCase(TestCase):
         )
         update_index(gitdir, [animals], write=True)
         entries = read_index(gitdir)
+
         sha = write_tree(gitdir, entries)
         self.assertEqual("dc6b8ea09fb7573a335c5fb953b49b85bb6ca985", sha)
 

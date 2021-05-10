@@ -4,11 +4,12 @@ import stat
 import unittest
 import zlib
 from unittest.mock import patch
+import gzip
 
 from pyfakefs.fake_filesystem_unittest import TestCase
 
 import pyvcs
-from pyvcs import index, objects, porcelain, repo, tree
+from pyvcs import index, objects, repo, tree
 
 
 @unittest.skipIf(pyvcs.__version_info__ < (0, 2, 0), "Нужна версия пакета 0.2.0 и выше")
@@ -36,7 +37,7 @@ class HashObjectTestCase(TestCase):
         self.assertTrue(obj_path.exists())
 
         with obj_path.open(mode="rb") as f:
-            content = zlib.decompress(f.read())
+            content=zlib.decompress(f.read())
         self.assertEqual(b"blob 20\x00that's what she said", content)
 
     def test_hash_object_twice(self):

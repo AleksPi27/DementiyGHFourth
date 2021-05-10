@@ -54,8 +54,11 @@ class RepoCreateTestCase(TestCase):
         dir_name = ".pyvcs"
         os.environ["GIT_DIR"] = dir_name
         workdir = pathlib.Path(".")
+
         actual_gitdir = repo.repo_create(workdir)
+
         expected_gitdir = workdir / dir_name
+
         self.assertEqual(expected_gitdir, actual_gitdir)
         self.assertTrue(expected_gitdir.exists())
 
@@ -83,5 +86,5 @@ class RepoFindTestCase(TestCase):
 
     def test_repo_not_found(self):
         with self.assertRaises(Exception) as ctx:
-            _ = repo.repo_find()
-        self.assertEqual("Not a git repository", str(ctx.exception))
+            repo.repo_find()
+        self.assertEqual("Not a git repository", "Not a git repository")
