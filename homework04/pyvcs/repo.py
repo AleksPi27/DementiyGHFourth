@@ -13,14 +13,17 @@ def Test2(rootDir):
 
 def repo_find(workdir: tp.Union[str, pathlib.Path] = ".") -> pathlib.Path:
     # PUT YOUR CODE HERE
-    if workdir is None and not ".git".exists():
-        raise Exception("Not a git repository")
-    if (workdir / ".git").exists():
-        return workdir / ".git"
-    if (workdir.parent).exists():
-        return workdir.parent
+    if "GIT_DIR" not in os.environ:
+        gitname = pathlib.Path(".git")
     else:
-        raise Exception("Not a git repository")
+        gitname = pathlib.Path(os.environ["GIT_DIR"])
+    while os.path.isdir(workdir):
+        if os.path.isdir(workdir / pathlib.Path(gitname)):
+            return workdir / gitname
+        if workdir.__eq__("."):
+            break
+        workdir = pathlib.Path(os.path.dirname(workdir))
+    raise AssertionError("Not a git repository")
 
 
 def repo_create(workdir: tp.Union[str, pathlib.Path]) -> pathlib.Path:
