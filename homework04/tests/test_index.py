@@ -96,7 +96,7 @@ class LsFilesTestCase(TestCase):
         expected_output = "\n".join(
             [
                 "100644 5716ca5987cbf97d6bb54920bea6adde242d87e6 0	bar.txt",
-                "100644 9f358a4addefcab294b83e4282bfef1f9625a249 0	baz/numbers.txt",
+                "100644 9f358a4addefcab294b83e4282bfef1f9625a249 0  baz/numbers.txt",
                 "100644 257cc5642cb1a054f08cc83f2d943e56fd3ebe99 0	foo.txt",
             ]
         )

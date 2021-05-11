@@ -58,19 +58,5 @@ def commit_tree(
     time_of_commit = (
             str(int(time.mktime(time.localtime()))) + " " + str(time.strftime("%z", time.gmtime()))
     )
-    store = (
-            "tree "
-            + tree
-            + "\nauthor "
-            + author
-            + " "
-            + time_of_commit
-            + "\ncommitter "
-            + author
-            + " "
-            + time_of_commit
-            + "\n\n"
-            + message
-            + "\n"
-    )
+    store = f"tree " + f"{tree}" + f"\nauthor " + f"{author}" + f" " + f"{time_of_commit}" + f"\ncommitter " + f"{author}" + f" " + f"{time_of_commit}" + f"\n\n" + f"{message}" + f"\n"
     return hash_object(store.encode(), "commit", True)
