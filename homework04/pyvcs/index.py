@@ -26,11 +26,10 @@ class GitIndexEntry(tp.NamedTuple):
 
     def pack(self) -> bytes:
         # PUT YOUR CODE HERE
-        name = self.name.encode()
         values = (self.ctime_s, self.ctime_n, self.mtime_s, self.mtime_n,
                   self.dev, self.ino, self.mode, self.uid,
-                  self.gid, self.size, self.sha1, self.flags, name)
-        packed = struct.pack(f"10L20sH{len(name) + 3}s", *values)
+                  self.gid, self.size, self.sha1, self.flags, self.name.encode())
+        packed = struct.pack("!10i20sh" + str(len(self.name)) + "s" + str(8 - (62 + len(self.name)) % 8) + "x", *values)
         return packed
 
     @staticmethod

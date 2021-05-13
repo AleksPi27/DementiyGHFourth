@@ -21,11 +21,13 @@ def write_tree(gitdir: pathlib.Path, index: tp.List[GitIndexEntry], dirname: str
             sha_of += ford1.encode() + b"\0"
             sha_of += entry.sha1
             sha_of_end = hash_object(sha_of, "tree", True)
+            print("sha_of_end is " + sha_of_end)
             content += bytes.fromhex(sha_of_end)
         else:
             content += oct(entry.mode)[2:].encode() + b" "
             content += entry.name.encode() + b"\0"
             content += entry.sha1
+            print(entry.sha1)
     tree = hash_object(content, "tree", True)
     return tree
 
@@ -58,5 +60,19 @@ def commit_tree(
     time_of_commit = (
             str(int(time.mktime(time.localtime()))) + " " + str(time.strftime("%z", time.gmtime()))
     )
-    store = f"tree " + f"{tree}" + f"\nauthor " + f"{author}" + f" " + f"{time_of_commit}" + f"\ncommitter " + f"{author}" + f" " + f"{time_of_commit}" + f"\n\n" + f"{message}" + f"\n"
+    store = (
+            "tree "
+            + tree
+            + "\nauthor "
+            + author
+            + " "
+            + time_of_commit
+            + "\ncommitter "
+            + author
+            + " "
+            + time_of_commit
+            + "\n\n"
+            + message
+            + "\n"
+    )
     return hash_object(store.encode(), "commit", True)
