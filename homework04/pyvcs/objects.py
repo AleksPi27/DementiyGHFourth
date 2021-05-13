@@ -43,7 +43,7 @@ def resolve_object(obj_name: str, gitdir: pathlib.Path) -> tp.List[str]:
                     if str(file).__contains__(obj_name[2:]):
                         objs.append(obj_name[:2] + file)
         if len(objs) == 0:
-            raise Exception(f"Not a valid object name {obj_name}")
+            raise AssertionError(f"Not a valid object name {obj_name}")
         return objs
 
 

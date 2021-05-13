@@ -29,7 +29,7 @@ def repo_find(workdir: tp.Union[str, pathlib.Path] = ".") -> pathlib.Path:
 def repo_create(workdir: tp.Union[str, pathlib.Path]) -> pathlib.Path:
     # PUT YOUR CODE HERE
     if os.path.isfile(workdir):
-        raise Exception(f"{workdir} is not a directory")
+        raise AssertionError(f"{workdir} is not a directory")
     if "GIT_DIR" not in os.environ:
         gitdir = workdir / pathlib.Path(".git")
     else:
