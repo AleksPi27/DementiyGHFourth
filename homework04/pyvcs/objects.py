@@ -89,17 +89,16 @@ def read_tree(data: bytes) -> tp.List[tp.Tuple[int, str, str]]:
 
 def cat_file(obj_name: str, pretty: bool = True) -> None:
     # PUT YOUR CODE HERE
-    path = pathlib.Path(pathlib.Path(".git/objects/" + obj_name[:2] + "/" + obj_name[2:]))
-    f = open(path, mode="rb")
-    content = zlib.decompress(f.read())
-    header = str(content[:4])
-    header = header[2:6]
-    content = content[8:]
-    content = str(content)
-    content = content.replace("\'", "'")
-    content = content[2:-1]
-    if pretty:
-        content.join("\n").join("")
+    gitdir = repo_find()
+    info = read_object(obj_name, gitdir)
+    if info[0] == "commit" or info[0] == "blob":
+        print(info[1].decode())
+    else:
+        for tree in read_tree(info[1]):
+            if tree[0] == 40000:
+                print(f"{tree[0]:06}", "tree", tree[2] + "\t" + tree[1])
+            else:
+                print(f"{tree[0]:06}", "blob", tree[2] + "\t" + tree[1])
 
 
 def find_tree_files(tree_sha: str, gitdir: pathlib.Path) -> tp.List[tp.Tuple[str, str]]:
